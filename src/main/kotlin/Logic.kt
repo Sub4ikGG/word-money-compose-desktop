@@ -2,7 +2,7 @@ import kotlin.Exception
 
 fun main() {
     try {
-        val word = "funf hundert sieben und zehn".lowercase() // 13
+        val word = "funfhundert zwei und zehn".lowercase() // 13
         val int = convertWordToInt(word = word)
 
         println("Ответ: $int")
@@ -13,6 +13,17 @@ fun main() {
 }
 
 fun convertWordToInt(word: String): Int {
+    if (word.isTenFirst().isNotEmpty()) {
+        var split = word.isTenFirst()
+        val first = split.first()
+        val ten = first.toTen()
+        split = split.drop(1)
+
+        if (split.isNotEmpty())
+            throw Exception("После десяток не могут идти значения")
+        else return ten
+    }
+
     var split = word.isUnitFirst()
     if (split.isNotEmpty() && split.first() != "null") { // drei 3
         val unit = split.first().toUnit().takeIf { it != 0 } ?: throw WordException("Нулевой множитель") // drei
@@ -35,8 +46,9 @@ fun convertWordToInt(word: String): Int {
                     if (split4.isBlank())
                         throw WordException("После 'und' должен быть десяток")
 
-                    val simple = checkIsSimple(split4.trim()) // achtzig 80
-                    return hundred + unit2 + simple
+                    if (split4.trim().isTen())
+                        return hundred + split4.trim().toTen() + unit2
+                    else throw WordException("После 'und' должен быть десяток")
                 }
 
                 if (split3.isEmpty()) return hundred + unit2 // 302
@@ -57,8 +69,10 @@ fun convertWordToInt(word: String): Int {
             val split3 = split.joinToString("").removePrefix("und")
 
             if (split3.isEmpty()) throw WordException("После 'und' должен быть десяток")
-            val simple = checkIsSimple(split3.trim())
-            return simple + unit
+
+            if (split3.trim().isTen())
+                return split3.trim().toTen() + unit
+            else throw WordException("После 'und' должен быть десяток")
         }
 
         if (split.isNotEmpty()) throw WordException("Неизвестное значение '${split.joinToString("")}'")
@@ -130,7 +144,7 @@ fun convertWordToInt(word: String): Int {
 private fun String.isUnitFirst(): List<String> {
     GermanDictionary.units.forEach { (key, _) ->
         if (this.startsWith(key)) {
-            val list = this.split(key).toMutableList()
+            val list = this.split(key, limit = 2).toMutableList()
             list.add(0, key)
             return list.fit()
         }
