@@ -33,6 +33,9 @@ fun convertWordToInt(word: String): Int {
         if (split2.joinToString("").startsWith("und"))
             throw WordException("После hundert не может идти und")
 
+        if (split2.joinToString("").isHundred())
+            throw WordException("После сотен не могут идти сотни")
+
         var split3 = split2.joinToString("").isUnitFirst()
         if (split3.isNotEmpty()) { // drei hundert zwei
             val unit2 = split3.first().toUnit() // zwei 2
@@ -55,7 +58,7 @@ fun convertWordToInt(word: String): Int {
 
         if (split2.joinToString("").contains("und")) {
             val first2 = split2.joinToString("").split("und").first().trim()
-            throw WordException("Ошибка при вводе $first2")
+            throw WordException("Ошибка при вводе $first2 после und")
         }
 
         if (split2.joinToString("").isBlank())
@@ -69,12 +72,13 @@ fun convertWordToInt(word: String): Int {
     }
 
     var split = word.isUnitFirst()
-    if (split.isNotEmpty() && split.first() != "null") { // drei 3
-        val unit = split.first().toUnit().takeIf { it != 0 } ?: throw WordException("Нулевой множитель") // drei
+    if (split.isNotEmpty()) { // drei 3
+        val unit = split.first().toUnit() // drei
         split = split.drop(1)
 
         var split2 = split.joinToString("").isHundredFirst()
         if (split2.isNotEmpty()) { // drei hundert
+            if (unit == 0) throw WordException("Нулевой множитель null перед hundert")
             val hundred = unit * split2.first().toHundred() // hundert 300
             split2 = split2.drop(1)
 
@@ -99,6 +103,7 @@ fun convertWordToInt(word: String): Int {
                 }
 
                 if (split3.isEmpty()) return hundred + unit2 // 302
+                else throw WordException("Ошибка при вводе '${split3.joinToString("")}'")
             }
 
             if (split2.joinToString("").contains("und")) {
@@ -133,6 +138,12 @@ fun convertWordToInt(word: String): Int {
         if (split.joinToString("").isTen())
             throw WordException("Пропущен 'und' между словами")
 
+        if (split.joinToString("").contains("un"))
+            throw WordException("Ошибка при вводе un")
+
+        if (split.joinToString("").contains("u"))
+            throw WordException("Ошибка при вводе u")
+
         if (split.joinToString("").isNotBlank())
             throw WordException("Ошибка при вводе ${split.joinToString("")}")
 
@@ -142,19 +153,26 @@ fun convertWordToInt(word: String): Int {
     if (word.isHundred())
         return word.toHundred()
 
-    if (word == GermanDictionary.DIVIDER) {
+    if (word.trim() == GermanDictionary.DIVIDER) {
         throw WordException("Перед 'und' должны идти единицы, а после десятки")
     }
 
     if (word.contains("und")) {
-        val first = word.split("und").first().trim()
-        throw WordException("Ошибка при вводе $first")
+        val split = word.trim().split("und").map { it.trim() }
+
+        if (split.first().isBlank())
+            throw WordException("Перед 'und' пропущено значение")
+
+        if (!split.first().isTen())
+            throw WordException("Ошибка при вводе ${split.first()}")
+
+        throw WordException("Ошибка при вводе $word")
     }
 
     try {
-        return checkIsSimple(word.fit())
+        return checkIsSimple(word)
     } catch (e: Exception) {
-        throw WordException("После единиц не могут идти выражения, только сотни")
+        throw WordException("Ошибка при вводе $word")
     }
 //    if (word.containsHundred()) {
 //        var splitWord = word.split("hundert").fit()
@@ -244,8 +262,8 @@ private fun String.isMutantFirst(): List<String> {
 
 private fun String.isHundredFirst(): List<String> {
     GermanDictionary.hundreds.forEach { (key, _) ->
-        if (this.startsWith("hundert")) {
-            val list = this.split(key).toMutableList()
+        if (this.trim().startsWith("hundert")) {
+            val list = this.split(key, limit = 2).toMutableList()
             list.add(0, key)
             return list.fit()
         }
@@ -267,7 +285,7 @@ fun checkIsSimple(word: String): Int {
     if (word.isUnit()) return word.toUnit()
     if (word.isTen()) return word.toTen()
     if (word.isMutant()) return word.toMutant()
-    throw Exception("'$word' неизвестное значение")
+    throw Exception("Ошибка при вводе '$word'")
 }
 
 private fun String.isUnit() = GermanDictionary.units[this] != null

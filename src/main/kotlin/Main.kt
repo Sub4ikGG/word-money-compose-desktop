@@ -1,9 +1,6 @@
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.desktop.ui.tooling.preview.Preview
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -25,42 +22,56 @@ fun App() {
         val input = remember { mutableStateOf("") }
         val result: MutableState<String?> = remember { mutableStateOf(null) }
 
-        Column(
-            modifier = Modifier.fillMaxSize().padding(16.dp)
-        ) {
-            Spacer(modifier = Modifier.weight(1f))
+        Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
+            Column(
+                modifier = Modifier.padding(16.dp).width(IntrinsicSize.Max),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Spacer(modifier = Modifier.weight(1f))
 
-            Text(text = "Слова в числа", style = TextStyle(fontSize = 16.sp, color = Color.Gray))
-            OutlinedTextField(
-                modifier = Modifier.padding(top = 8.dp),
-                value = input.value,
-                onValueChange = {
-                    input.value = it
-                    result.value = if (it.isNotBlank()) {
-                        try {
-                            convertWordToInt(word = it).toString()
-                        } catch (e: Exception) { e.localizedMessage }
-                    } else null
-                },
-                textStyle = TextStyle(fontSize = 20.sp),
-                placeholder = { Text(text = "Конструкции", style = TextStyle(fontSize = 20.sp)) }
-            )
-
-            AnimatedVisibility(result.value != null) {
-                Text(
+                OutlinedTextField(
                     modifier = Modifier.padding(top = 8.dp),
-                    text = "Результат: ${result.value}",
-                    style = TextStyle(fontSize = 18.sp)
+                    value = input.value,
+                    onValueChange = {
+                        input.value = it
+                    },
+                    textStyle = TextStyle(fontSize = 20.sp),
+                    placeholder = { Text(text = "Слова", style = TextStyle(fontSize = 20.sp)) }
                 )
-            }
 
-            Spacer(modifier = Modifier.weight(1f))
+                Button(
+                    modifier = Modifier.fillMaxWidth().height(60.dp).padding(top = 8.dp),
+                    content = {
+                        Text(text = "Посчитать")
+                    },
+                    onClick = {
+                        result.value = if (input.value.isNotBlank()) {
+                            try {
+                                convertWordToInt(word = input.value).toString()
+                            } catch (e: Exception) {
+                                e.localizedMessage
+                            }
+                        } else null
+                    }
+                )
+
+                AnimatedVisibility(result.value != null) {
+                    Text(
+                        modifier = Modifier.padding(top = 8.dp),
+                        text = "Итог: ${result.value}",
+                        style = TextStyle(fontSize = 18.sp)
+                    )
+                }
+
+                Spacer(modifier = Modifier.weight(1f))
+            }
         }
     }
 }
 
 fun main() = application {
-    Window(title = "Слова в числа", resizable = false, onCloseRequest = ::exitApplication) {
+    Window(title = "Влад Горбушин, домашняя работа №1", resizable = false, onCloseRequest = ::exitApplication) {
         App()
     }
 }
