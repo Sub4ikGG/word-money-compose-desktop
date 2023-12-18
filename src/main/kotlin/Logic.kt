@@ -170,12 +170,6 @@ fun convertWordToInt(word: String): Int {
         if (split.joinToString("").isTen())
             throw WordException("Пропущен 'und' между единицей и десятком")
 
-        if (split.joinToString("").startsWith("un"))
-            throw WordException("Ошибка при вводе un\n\nПосле единиц должен идти und и десяток, либо ничего")
-
-        if (split.joinToString("").startsWith("u"))
-            throw WordException("Ошибка при вводе u\n\nПосле единиц должен идти und и десяток, либо ничего")
-
         if (split.joinToString("").isNotBlank())
             throw WordException("Ошибка при вводе '${split.joinToString("").split(" ").fit().first()}' после единицы\n\nПосле единиц должна идти сотня, либо und и десяток")
 
