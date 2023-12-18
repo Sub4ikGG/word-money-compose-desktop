@@ -141,8 +141,26 @@ fun convertWordToInt(word: String): Int {
 
             if (split3.isEmpty()) throw WordException("После 'und' должен быть десяток")
 
-            if (split3.trim().isTen())
-                return split3.trim().toTen() + unit
+            if (split3.trim().isTen()) {
+                val ten = split3.trim().toTen()
+                val result = ten + unit
+
+                if (GermanDictionary.mutants.containsValue(result)) {
+                    GermanDictionary.mutants.forEach {
+                        if (it.value == result)
+                            throw WordException("Данное значение пишется кратко как '${it.key}'")
+                    }
+                }
+
+                if (GermanDictionary.tens.containsValue(result)) {
+                    GermanDictionary.tens.forEach {
+                        if (it.value == result)
+                            throw WordException("Данное значение пишется кратко как '${it.key}'")
+                    }
+                }
+
+                return ten + unit
+            }
             else throw WordException("Ошибка при вводе ${split3.trim()}\n\nПосле und должны идти десятки")
         }
 
