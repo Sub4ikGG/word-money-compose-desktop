@@ -49,7 +49,7 @@ object GermanDictionary {
         "funfhundert" to 500,
         "sechshundert" to 600,
         "siebenhundert" to 700,
-        "acthundert" to 800,
+        "achthundert" to 800,
         "neunhundert" to 900
     )
 

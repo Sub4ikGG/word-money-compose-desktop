@@ -36,6 +36,11 @@ fun convertWordToInt(word: String): Int {
         if (split2.joinToString("").isHundred())
             throw WordException("После сотен не могут идти сотни")
 
+        if (split2.joinToString("").isTen()) {
+            val ten = split2.joinToString("").toTen()
+            return hundred + ten
+        }
+
         var split3 = split2.joinToString("").isUnitFirst()
         if (split3.isNotEmpty()) { // drei hundert zwei
             val unit2 = split3.first().toUnit() // zwei 2
@@ -46,11 +51,12 @@ fun convertWordToInt(word: String): Int {
                 val split4 = split3.joinToString("").removePrefix("und")
 
                 if (split4.isBlank())
-                    throw WordException("После 'und' должен быть десяток")
+                    throw WordException("После 'und' должен быть ДЕСЯТОК")
 
                 if (split4.trim().isTen())
                     return hundred + split4.trim().toTen() + unit2
-                else throw WordException("Ошибка при вводе '${split4.trim()}'")
+                else throw WordException("Ошибка при вводе '${split4.trim()}'\n\n" +
+                        "После ввода und должны идти ДЕСЯТКИ, ни сотни, ни единицы")
             }
 
             if (split3.isEmpty()) return hundred + unit2 // 302
@@ -58,7 +64,7 @@ fun convertWordToInt(word: String): Int {
 
         if (split2.joinToString("").contains("und")) {
             val first2 = split2.joinToString("").split("und").first().trim()
-            throw WordException("Ошибка при вводе $first2 после und")
+            throw WordException("Ошибка при вводе '$first2' перед und, перед und должны идти единицы")
         }
 
         if (split2.joinToString("").isBlank())
@@ -67,7 +73,7 @@ fun convertWordToInt(word: String): Int {
         if (split2.joinToString("") == GermanDictionary.DIVIDER)
             throw WordException("Перед 'und' должны идти единицы, а после десятки")
 
-        val simple = checkIsSimple(split2.joinToString("").trim())
+        val simple = checkIsSimple(split2.joinToString("").trim(), error = "После сотен должны идти либо единицы, либо десятки, либо ничего")
         return hundred + simple
     }
 
@@ -85,6 +91,14 @@ fun convertWordToInt(word: String): Int {
             if (split2.joinToString("").startsWith("und"))
                 throw WordException("После hundert не может идти und")
 
+            if (split2.joinToString("").isHundred())
+                throw WordException("После сотен не могут идти сотни")
+
+            if (split2.joinToString("").isTen()) {
+                val ten = split2.joinToString("").toTen()
+                return hundred + ten
+            }
+
             var split3 = split2.joinToString("").isUnitFirst()
             if (split3.isNotEmpty()) { // drei hundert zwei
                 val unit2 = split3.first().toUnit() // zwei 2
@@ -99,16 +113,16 @@ fun convertWordToInt(word: String): Int {
 
                     if (split4.trim().isTen())
                         return hundred + split4.trim().toTen() + unit2
-                    else throw WordException("Ошибка при вводе '${split4.trim()}'")
+                    else throw WordException("Ошибка при вводе '${split4.trim()}'\n\nПосле ввода und должны идти десятки, ни сотни, ни единицы")
                 }
 
                 if (split3.isEmpty()) return hundred + unit2 // 302
-                else throw WordException("Ошибка при вводе '${split3.joinToString("")}'")
+                else throw WordException("Ошибка при вводе '${split3.joinToString("")}'\n\nПосле единиц должен идти und и десятки, либо ничего")
             }
 
             if (split2.joinToString("").contains("und")) {
                 val first = split2.joinToString("").split("und").first().trim()
-                throw WordException("Ошибка при вводе $first")
+                throw WordException("Ошибка при вводе '$first' перед und, перед und должны идти единицы")
             }
 
             if (split2.joinToString("").isBlank())
@@ -117,7 +131,7 @@ fun convertWordToInt(word: String): Int {
             if (split2.joinToString("") == GermanDictionary.DIVIDER)
                 throw WordException("Перед 'und' должны идти единицы, а после десятки")
 
-            val simple = checkIsSimple(split2.joinToString("").trim())
+            val simple = checkIsSimple(split2.joinToString("").trim(), error = "После сотен должны идти либо единицы, либо десятки, либо ничего")
             return hundred + simple
         }
 
@@ -129,23 +143,23 @@ fun convertWordToInt(word: String): Int {
 
             if (split3.trim().isTen())
                 return split3.trim().toTen() + unit
-            else throw WordException("Ошибка при вводе  ${split3.trim()}")
+            else throw WordException("Ошибка при вводе ${split3.trim()}\n\nПосле und должны идти десятки")
         }
 
         if (split.joinToString("").isUnit())
             throw WordException("После единиц не могут идти единицы")
 
         if (split.joinToString("").isTen())
-            throw WordException("Пропущен 'und' между словами")
+            throw WordException("Пропущен 'und' между единицей и десятком")
 
-        if (split.joinToString("").contains("un"))
-            throw WordException("Ошибка при вводе un")
+        if (split.joinToString("").startsWith("un"))
+            throw WordException("Ошибка при вводе un\n\nПосле единиц должен идти und, либо ничего")
 
-        if (split.joinToString("").contains("u"))
-            throw WordException("Ошибка при вводе u")
+        if (split.joinToString("").startsWith("u"))
+            throw WordException("Ошибка при вводе u\n\nПосле единиц должен идти und, либо ничего")
 
         if (split.joinToString("").isNotBlank())
-            throw WordException("Ошибка при вводе ${split.joinToString("")}")
+            throw WordException("Ошибка при вводе '${split.joinToString("")}' после единицы\n\nПосле единиц должны идти сотни, либо und и десятки")
 
         return unit
     }
@@ -157,16 +171,21 @@ fun convertWordToInt(word: String): Int {
         throw WordException("Перед 'und' должны идти единицы, а после десятки")
     }
 
-    if (word.contains("und")) {
+    if (word.contains("und") && !word.contains("hundert")) {
         val split = word.trim().split("und").map { it.trim() }
 
         if (split.first().isBlank())
-            throw WordException("Перед 'und' пропущено значение")
+            throw WordException("Перед 'und' пропущена единица")
 
         if (!split.first().isTen())
-            throw WordException("Ошибка при вводе ${split.first()}")
+            throw WordException("Ошибка при вводе ${split.first()}\n\nПеред und должны идти единицы")
 
         throw WordException("Ошибка при вводе $word")
+    }
+
+    if (word.contains("hundert")) {
+        val beforeHundred = word.split("hundert").first()
+        throw WordException("Ошибка при вводе $beforeHundred\n\nПеред сотнями должны идти единицы (мультипликатор)")
     }
 
     try {
@@ -281,11 +300,11 @@ fun checkMultiplier(multiplier: String): Int {
     throw Exception("'$multiplier' неизвестный множитель")
 }
 
-fun checkIsSimple(word: String): Int {
+fun checkIsSimple(word: String, error: String = ""): Int {
     if (word.isUnit()) return word.toUnit()
     if (word.isTen()) return word.toTen()
     if (word.isMutant()) return word.toMutant()
-    throw Exception("Ошибка при вводе '$word'")
+    throw Exception("Ошибка при вводе '$word'\n\n$error")
 }
 
 private fun String.isUnit() = GermanDictionary.units[this] != null

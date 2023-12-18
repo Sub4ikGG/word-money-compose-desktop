@@ -4,8 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a0abf5ee-e19f-4cce-a339-045a30b3d5e9" name="Changes" comment="Правки">
+    <list default="true" id="a0abf5ee-e19f-4cce-a339-045a30b3d5e9" name="Changes" comment="VladEdition">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/GermanDictionary.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/GermanDictionary.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/Logic.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Logic.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/Main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Main.kt" afterDir="false" />
     </list>
@@ -40,6 +41,20 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;Sub4ikGG&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">
+    <option name="selectedUrlAndAccountId">
+      <UrlAndAccount>
+        <option name="accountId" value="1d9bc5c3-8995-4758-8a5e-3ed6e3830c09" />
+        <option name="url" value="https://github.com/Sub4ikGG/word-money.git" />
+      </UrlAndAccount>
+    </option>
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 0
@@ -100,7 +115,9 @@
       <workItem from="1702149922716" duration="618000" />
       <workItem from="1702214017640" duration="2825000" />
       <workItem from="1702640141934" duration="2333000" />
-      <workItem from="1702665881494" duration="1115000" />
+      <workItem from="1702665881494" duration="2398000" />
+      <workItem from="1702722837920" duration="1702000" />
+      <workItem from="1702886172659" duration="7085000" />
     </task>
     <task id="LOCAL-00001" summary="Переписал">
       <option name="closed" value="true" />
@@ -126,16 +143,36 @@
       <option name="project" value="LOCAL" />
       <updated>1702149997810</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="VladEdition">
+      <option name="closed" value="true" />
+      <created>1702667030652</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1702667030652</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Переписал" />
     <MESSAGE value="Правки" />
-    <option name="LAST_COMMIT_MESSAGE" value="Правки" />
+    <MESSAGE value="VladEdition" />
+    <option name="LAST_COMMIT_MESSAGE" value="VladEdition" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
