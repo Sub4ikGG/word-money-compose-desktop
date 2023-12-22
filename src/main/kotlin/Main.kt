@@ -36,11 +36,11 @@ fun App() {
                 value = input.value,
                 onValueChange = {
                     input.value = it
-                    result.value = if (it.isNotBlank()) {
-                        try {
-                            convertWordToInt(word = it).toString()
-                        } catch (e: Exception) { e.localizedMessage }
-                    } else null
+//                    result.value = if (it.isNotBlank()) {
+//                        try {
+//                            convertWordToInt(word = it).toString()
+//                        } catch (e: Exception) { e.localizedMessage }
+//                    } else null
                 },
                 textStyle = TextStyle(fontSize = 20.sp),
                 placeholder = { Text(text = "Конструкции", style = TextStyle(fontSize = 20.sp)) }
